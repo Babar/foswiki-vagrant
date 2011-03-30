@@ -1,0 +1,6 @@
+#deb http://ftp.us.debian.org/debian <%= node[:lsb][:codename] %> non-free
+#deb-src http://ftp.us.debian.org/debian <%= node[:lsb][:codename] %> non-free
+
+# lsb isn't populated on Debian, only on Ubuntu
+deb http://ftp.us.debian.org/debian lenny non-free
+deb-src http://ftp.us.debian.org/debian lenny non-free

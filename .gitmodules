@@ -1,0 +1,3 @@
+[submodule "foswiki"]
+	path = foswiki
+	url = git://github.com/foswiki/foswiki.git
