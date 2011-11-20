@@ -12,6 +12,8 @@ The aim of this project is double:
 To use this, you will need Vagrant, VirtualBox (version 4 at least), and some basebox for Vagrant
 <pre>
 TODO: Give real instructions
+#download and install VirtualBox, then
+$ gem install vagrant
 $ git clone http://github.com/Babar/fowiki-vagrant.git
 $ git submodule update --init
 </pre>
