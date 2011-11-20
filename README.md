@@ -14,7 +14,8 @@ To use this, you will need Vagrant, VirtualBox (version 4 at least), and some ba
 TODO: Give real instructions
 #download and install VirtualBox, then
 $ gem install vagrant
-$ git clone http://github.com/Babar/fowiki-vagrant.git
+$ git clone https://github.com/Babar/foswiki-vagrant.git
+$ cd foswiki-vagrant
 $ git submodule update --init
 </pre>
 
