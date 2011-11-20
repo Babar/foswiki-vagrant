@@ -9,10 +9,13 @@ The aim of this project is double:
 2. Ease and automate unit testing on several architectures
 
 ## Installation
-To use this, you will need Vagrant, VirtualBox (version 4 at least), and some basebox for Vagrant
+To use this, you will need Vagrant, VirtualBox (version 4.1 at least), and some basebox for Vagrant
 <pre>
 TODO: Give real instructions
-$ git clone http://github.com/Babar/fowiki-vagrant.git
+#download and install VirtualBox, then
+$ gem install vagrant
+$ git clone https://github.com/Babar/foswiki-vagrant.git
+$ cd foswiki-vagrant
 $ git submodule update --init
 </pre>
 
