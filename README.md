@@ -9,7 +9,7 @@ The aim of this project is double:
 2. Ease and automate unit testing on several architectures
 
 ## Installation
-To use this, you will need Vagrant, VirtualBox (version 4 at least), and some basebox for Vagrant
+To use this, you will need Vagrant, VirtualBox (version 4.1 at least), and some basebox for Vagrant
 <pre>
 TODO: Give real instructions
 #download and install VirtualBox, then
