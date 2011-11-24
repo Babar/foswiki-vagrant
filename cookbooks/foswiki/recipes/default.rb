@@ -12,6 +12,10 @@ include_recipe "git"
 package "git-svn"
 # For JQuery compression
 include_recipe "java_sun"
+# Install apache
+include_recipe "apache2"
+# If you want mod_perl, you can try this:
+#include_recipe "apache2::mod_perl"
 
 # Foswiki dependencies
 %w{ libdevel-symdump-perl libhtml-tidy-perl libhtml-tree-perl
@@ -33,6 +37,7 @@ directory "/home/foswiki" do
   recursive true
 end
 
+# Checkout both working branches into separate directories
 %w{ Release01x01 master }.each do |branch|
   rootdir = "/home/foswiki/#{branch}"
   git rootdir do
@@ -42,51 +47,10 @@ end
     action [ :checkout, :sync ]
   end
 
-  logfile="/tmp/UnitTest-#{branch}.log"
-  bash "run_unitTests" do
+  bash "pseudo_install" do
     user "foswiki"
     cwd "#{rootdir}/core"
-    code <<-EoC
-exec &> #{logfile}
-git clean -xdf
-perl -T pseudo-install.pl -A developer
-pushd test/unit
-perl -T ../bin/TestRunner.pl -clean FoswikiSuite.pm
-#perl -T ../bin/TestRunner.pl -clean -log SemiAutomaticTestCaseTests
-#perl -T ../bin/TestRunner.pl -clean -log Fn_SEARCH::verify_date_param_ForkingSearch
-#perl -T ../bin/TestRunner.pl -clean QueryTests
-popd
-perl -T pseudo-install.pl -u -A -force developer >/dev/null
-exec >&- # Close logfile
-EoC
-    returns [ 0, 1, 2 ] # Chef shall not fail here, we will check the result manually
-    not_if do File.exists?( logfile ) end
-  end
-
-  logMsg = 'Not set yet'
-  logArray = Array.new
-  success = false
-  ruby_block "check_output" do
-    block do
-      File.open(logfile, 'r') do |fh|
-        fh.each_line do |line|
-          line.chomp!
-          if (line =~ /^(-+|\d+ failures:)$/ ... line =~ /^$/)
-            logArray.push(line) if line =~ /^[^-]+$/
-          end
-          if line =~ /All tests passed/ then
-            success = true
-            logMsg = line
-            Chef::Log.error("All tests passed!!!!")
-          end
-        end
-      end
-      if success
-        Chef::Log.info("Passed: #{branch} => #{logMsg}")
-      else
-        logMsg = logArray.join("\n")
-        Chef::Log.error("Failed: #{branch} => #{logMsg}")
-      end
-    end
+    code "perl -T pseudo-install.pl -A developer"
+    not_if do File.exists?( "#{rootdir}/core/lib/LocalSite.cfg" ) end
   end
 end
