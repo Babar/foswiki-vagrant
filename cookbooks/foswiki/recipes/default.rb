@@ -37,9 +37,12 @@ directory "/home/foswiki" do
   recursive true
 end
 
+passwd_file = "/home/foswiki/.htpasswd"
 # Checkout both working branches into separate directories
 %w{ Release01x01 master }.each do |branch|
   rootdir = "/home/foswiki/#{branch}"
+
+  # Checkout source code for the branch
   git rootdir do
     user "foswiki"
     repository "/vagrant_foswiki"
@@ -47,10 +50,65 @@ end
     action [ :checkout, :sync ]
   end
 
+  # pseudo-install code
   bash "pseudo_install" do
     user "foswiki"
     cwd "#{rootdir}/core"
-    code "perl -T pseudo-install.pl -A developer"
+    code "perl -T pseudo-install.pl developer"
+    not_if do File.exists?( "#{rootdir}/core/build.pl" ) end
+  end
+
+  # Install default Apache configuration
+  template "#{node[:apache][:dir]}/conf.d/#{branch}.conf" do
+    source "apache.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    notifies :restart, resources(:service => "apache2")
+    variables(
+      :branch       => branch,
+      :passwd_file  => passwd_file,
+      :rootdir      => rootdir
+    )
+  end
+
+  # Install default Foswiki configuration
+  template "#{rootdir}/core/lib/LocalSite.cfg" do
+    source "LocalSite.erb"
+    owner node[:apache][:user]
+    group node[:apache][:user]
+    mode 0644
+    variables(
+      :branch       => branch,
+      :passwd_file  => passwd_file,
+      :rootdir      => rootdir
+    )
     not_if do File.exists?( "#{rootdir}/core/lib/LocalSite.cfg" ) end
   end
+
+  # Create the necessary directories, and ensure apache user can write
+  # where he needs to
+  %w{ data working pub test/unit/fake_templates test/unit
+      test/unit/fake_data lib/Foswiki/Plugins }.each do |dir|
+    bash "fix perms #{dir}" do
+      code "chown -R #{node[:apache][:user]} #{rootdir}/core/#{dir}"
+      only_if do File.exists?( "#{rootdir}/core/#{dir}" ) end
+    end
+    directory "#{rootdir}/core/#{dir}" do
+      recursive true
+      owner node[:apache][:user]
+      group node[:apache][:user]
+      mode "0755"
+      action :create
+    end
+  end
+end
+
+# Create the .htpasswd default one: admin / foswiki
+bash "Create default .htpasswd" do
+  code <<-EoC
+    htpasswd -b -c #{passwd_file} admin foswiki
+    chown #{node[:apache][:user]} #{passwd_file}
+  EoC
+  not_if do File.exists?( passwd_file ) end
 end
