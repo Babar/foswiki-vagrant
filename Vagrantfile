@@ -29,6 +29,17 @@ Vagrant::Config.run do |config|
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
   #
-  config.vm.provision :chef_solo, :cookbooks_path => "cookbooks",
-  			  :run_list => ["recipe[foswiki]"]
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = "cookbooks"
+    chef.run_list = ["recipe[foswiki]"]
+    chef.json = {
+      :authorization => {
+        :sudo => {
+          :groups => [ :root ],
+          :users  => [ :vagrant, :foswiki ],
+          :passwordless => true
+        }
+      }
+    }
+  end
 end

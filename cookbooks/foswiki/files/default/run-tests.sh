@@ -10,15 +10,8 @@ exec 3>>$LOGFILE
 
 trap 'kill -15 %2 %1' 0 2 3 15
 
-if head -1 core/pseudo-install.pl | GREP_OPTIONS= grep -- -wT; then
-    TAINT=-T
-else
-    TAINT=''
-fi
-apacheUser=`awk -F: '/^w/{print $1}' /etc/passwd`
-id -u $apacheUser >/dev/null || (echo -e "Could not determine apache user. Found:\n$apacheUser";exit 1)
-[ -z "$FOSWIKI_HOME" ] && (echo "No FOSWIKI_HOME set. Please set it and restart this script"; exit 1)
-[ -d $FOSWIKI_HOME ] || (echo "FOSWIKI_HOME points to $FOSWIKI_HOME, which is not a directory. Please check it and restart this script"; exit 1)
+# Check and define environment
+[ -f env.sh ] && . ./env.sh
 
 OPTIONS='-clean'
 for arg in "$@"; do

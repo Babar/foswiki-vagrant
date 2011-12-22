@@ -16,6 +16,8 @@ include_recipe "java_sun"
 include_recipe "apache2"
 # If you want mod_perl, you can try this:
 #include_recipe "apache2::mod_perl"
+# Configure sudo for Foswiki
+include_recipe "sudo"
 
 # Foswiki dependencies
 %w{ libdevel-symdump-perl libhtml-tidy-perl libhtml-tree-perl
@@ -111,6 +113,15 @@ passwd_file = "/home/foswiki/.htpasswd"
       group "foswiki"
       mode 0755
     end
+  end
+  template "#{rootdir}/env.sh" do
+    source "env.erb"
+    owner "foswiki"
+    group "foswiki"
+    mode 0644
+    variables(
+      :rootdir => rootdir
+    )
   end
 end
 

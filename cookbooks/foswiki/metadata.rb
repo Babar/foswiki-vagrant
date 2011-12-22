@@ -7,7 +7,7 @@ version          "0.0.1"
 
 recipe "foswiki", "Installs foswiki"
 
-%w{ apache2 apt git java_sun }.each do |cb|
+%w{ apache2 apt git java_sun sudo }.each do |cb|
   depends cb
 end
 

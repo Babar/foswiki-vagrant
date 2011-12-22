@@ -1,9 +1,8 @@
 #!/bin/bash
 
-apacheUser=`awk -F: '/^w/{print $1}' /etc/passwd`
-id -u $apacheUser >/dev/null || (echo -e "Could not determine apache user. Found:\n$apacheUser";exit 1)
-[ -z "$FOSWIKI_HOME" ] && (echo "No FOSWIKI_HOME set. Please set it and restart this script"; exit 1)
-[ -d $FOSWIKI_HOME ] || (echo "FOSWIKI_HOME points to $FOSWIKI_HOME, which is not a directory. Please check it and restart this script"; exit 1)
+# Check and define environment
+[ -f env.sh ] && . ./env.sh
+
 cd $FOSWIKI_HOME
 sudo chown -R $LOGNAME $FOSWIKI_HOME
 sudo rm -rf $FOSWIKI_HOME/data/Temp*
