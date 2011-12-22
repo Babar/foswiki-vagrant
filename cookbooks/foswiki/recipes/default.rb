@@ -102,6 +102,16 @@ passwd_file = "/home/foswiki/.htpasswd"
       action :create
     end
   end
+
+  # Install some useful development scripts
+  %w{ bisect build-release dev git run-tests }.each do |file|
+    cookbook_file "#{rootdir}/#{file}.sh" do
+      source "#{file}.sh"
+      owner "vagrant"
+      group "vagrant"
+      mode 0755
+    end
+  end
 end
 
 # Create the .htpasswd default one: admin / foswiki
