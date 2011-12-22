@@ -107,8 +107,8 @@ passwd_file = "/home/foswiki/.htpasswd"
   %w{ bisect build-release dev git run-tests }.each do |file|
     cookbook_file "#{rootdir}/#{file}.sh" do
       source "#{file}.sh"
-      owner "vagrant"
-      group "vagrant"
+      owner "foswiki"
+      group "foswiki"
       mode 0755
     end
   end
