@@ -133,3 +133,8 @@ bash "Create default .htpasswd" do
   EoC
   not_if do File.exists?( passwd_file ) end
 end
+
+# SQL hacks
+%w{ dbd-mysql dbi dbd-pg }.each do |pkg|
+  package "lib#{pkg}-perl"
+end
