@@ -7,6 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 
+# Ensure sources are up-to-date
+include_recipe "apt"
 # To clone the sources
 include_recipe "git"
 package "git-svn"
