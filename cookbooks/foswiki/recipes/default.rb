@@ -22,10 +22,12 @@ include_recipe "apache2"
 include_recipe "sudo"
 
 # Foswiki dependencies
-%w{ libdevel-symdump-perl libhtml-tidy-perl libhtml-tree-perl
-    libhtml-parser-perl liburi-perl libwww-perl tidy zip
-    libcss-minifier-xs-perl libjavascript-minifier-xs-perl
-    liberror-perl libalgorithm-diff-perl rcs }.each do |pkg|
+%w{ devel-symdump html-tidy html-tree html-parser uri www json
+    css-minifier-xs javascript-minifier-xs error algorithm-diff
+    crypt-eksblowfish crypt-passwdmd5 file-remove }.each do |pkg|
+  package "lib#{pkg}-perl"
+end
+%w{ tidy zip rcs }.each do |pkg|
   package pkg
 end
 
