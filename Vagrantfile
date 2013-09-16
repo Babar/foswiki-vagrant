@@ -19,14 +19,14 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port "http", 80, 8080
+  config.vm.forward_port 80, 8080
 
   # If you install the DB on the VM, you can uncomment those to access it from
   # the host, if need be
   # Forward local MySQL port
-  # config.vm.forward_port "MySQL", 3306, 3306
+  # config.vm.forward_port 3306, 3306
   # Forward local PostgreSQL port
-  # config.vm.forward_port "PostgreSQL", 5432, 5432
+  # config.vm.forward_port 5432, 5432
 
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
