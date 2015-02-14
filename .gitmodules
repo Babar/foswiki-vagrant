@@ -1,6 +1,6 @@
 [submodule "foswiki"]
 	path = foswiki
-	url = git://github.com/foswiki/foswiki.git
+	url = https://github.com/foswiki/distro.git
 [submodule "cookbooks/apt"]
 	path = cookbooks/apt
 	url = https://github.com/opscode-cookbooks/apt.git
