@@ -13,7 +13,7 @@ include_recipe "apt"
 include_recipe "git"
 package "git-svn"
 # For JQuery compression
-include_recipe "java_sun"
+# include_recipe "java_sun"
 # Install apache
 include_recipe "apache2"
 # If you want mod_perl, you can try this:
